@@ -243,6 +243,27 @@ func (u *User) DisplayName() string {
 	return displayName
 }
 
+// DisplayName returns the display name of the user.
+// The display name is the first and last name, or the email address of the user.
+// If none of these fields are set, the user identifier is returned.
+func (u *User) DisplayName() string {
+	var displayName string
+	switch {
+	case u.Firstname != "" && u.Lastname != "":
+		displayName = fmt.Sprintf("%s %s", u.Firstname, u.Lastname)
+	case u.Firstname != "":
+		displayName = u.Firstname
+	case u.Lastname != "":
+		displayName = u.Lastname
+	case u.Email != "":
+		displayName = u.Email
+	default:
+		displayName = string(u.Identifier)
+	}
+
+	return displayName
+}
+
 // region webauthn
 
 func (u *User) WebAuthnID() []byte {
